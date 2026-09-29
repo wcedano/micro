@@ -1,0 +1,35 @@
+# --- SDK (enlace simbolico a ../sdks, ~1 GB) ---
+__repo__
+__repo__/
+
+# --- Carpetas de compilacion (CMake/Ninja) ---
+debug/
+release/
+build/
+armgcc/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.obj
+*.d
+
+# --- Copias de seguridad ---
+*.bak
+*.bak-*
+*.pre-*
+*.orig
+*~
+
+# --- Archivos generados por los Config Tools ---
+cfg_tools/*.processed
+
+# --- VS Code: se conserva la config del proyecto, no la personal ---
+.vscode/*.bak
+.vscode/*.log
+.vscode/ipch/
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db

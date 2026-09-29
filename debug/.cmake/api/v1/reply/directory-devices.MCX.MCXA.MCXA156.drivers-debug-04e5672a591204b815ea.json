@@ -1,0 +1,19 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "devices/MCX/MCXA/MCXA156/drivers",
+		"source" : "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/devices/MCX/MCXA/MCXA156/drivers"
+	}
+}

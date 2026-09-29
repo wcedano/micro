@@ -1,0 +1,17 @@
+{
+  "projects": [{
+    "core": "cm33_core0",
+    "addComponents": [],
+    "device_package": "MCXA156VLL",
+    "addIncludes": [],
+    "projectBoardFolder": "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156",
+    "source_generated_cmake_file_path": "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156/cfg_tools_generated.cmake",
+    "addFiles": [],
+    "name": "rgb_control",
+    "removeFiles": [],
+    "projectRootPath": "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control",
+    "component_edit_prj_file_path": "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/prj.conf",
+    "board": "frdmmcxa156"
+  }],
+  "$schema": "https://mcuxpresso.nxp.com/staticdata/mcux/schema/cfg_require/cfg_require_schema_1.0.json"
+}

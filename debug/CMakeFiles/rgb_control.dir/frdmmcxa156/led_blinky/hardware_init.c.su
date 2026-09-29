@@ -1,0 +1,2 @@
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/gpio/fsl_gpio.h:346:20:GPIO_PinWrite	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156/led_blinky/hardware_init.c:17:6:BOARD_InitHardware	8	static

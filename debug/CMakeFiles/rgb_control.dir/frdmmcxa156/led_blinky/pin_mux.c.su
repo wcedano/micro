@@ -1,0 +1,7 @@
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/devices/MCX/MCXA/MCXA156/drivers/fsl_clock.h:672:20:CLOCK_EnableClock	32	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/devices/MCX/MCXA/MCXA156/drivers/fsl_reset.h:240:20:RESET_ReleasePeripheralReset	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/port/fsl_port.h:360:20:PORT_SetPinConfig	32	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/port/fsl_port.h:463:20:PORT_SetPinMux	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/gpio/fsl_gpio.h:487:20:GPIO_SetPinInterruptConfig	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156/led_blinky/pin_mux.c:38:6:BOARD_InitBootPins	8	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156/led_blinky/pin_mux.c:70:6:BOARD_InitPins	32	static

@@ -1,0 +1,12 @@
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2358:22:__NVIC_EnableIRQ	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:2555:22:__NVIC_SetPriority	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/arch/arm/CMSIS/Core/Include/core_cm33.h:3108:26:SysTick_Config	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/common/fsl_common_arm.h:753:24:EnableIRQ	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/gpio/fsl_gpio.h:346:20:GPIO_PinWrite	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/sdks/rgb_control_sdk/mcuxsdk/drivers/ctimer/fsl_ctimer.h:517:20:CTIMER_StartTimer	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:46:6:SysTick_Handler	4	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:55:6:GPIO1_IRQHandler	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:80:6:GPIO0_IRQHandler	16	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:103:5:main	24	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:174:6:color_change	8	static
+/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/led_blinky.c:183:6:color_loop_speed_change	8	static
