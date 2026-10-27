@@ -12,6 +12,7 @@
 #include "fsl_common.h"
 #include "fsl_ctimer.h"
 #include "fsl_clock.h"
+#include "fsl_lpadc.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -48,11 +49,21 @@ extern "C" {
 #define CTIMER0_PWM_PERIOD_CH kCTIMER_Match_0
 /* Definition of PWM period */
 #define CTIMER0_PWM_PERIOD 99
+/* Alias for ADC1 peripheral */
+#define ADC1_PERIPHERAL ADC1
+/* Command 1 - ADC_CH0 */
+#define ADC1_ADC_CH0 1U
+/* Command 2 - ADC_CH1 */
+#define ADC1_ADC_CH1 2U
+/* Command 3 - ADC_CH2 */
+#define ADC1_ADC_CH2 3U
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
 extern const ctimer_config_t CTIMER0_config;
+extern const lpadc_config_t ADC1_config;
+extern lpadc_conv_command_config_t ADC1_commandsConfig[3];
 
 /***********************************************************************************************************************
  * Initialization functions

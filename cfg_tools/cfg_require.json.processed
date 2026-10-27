@@ -1,7 +1,11 @@
 {
   "projects": [{
     "core": "cm33_core0",
-    "addComponents": [],
+    "addComponents": [{
+      "kconfig_id": "driver.lpadc",
+      "manifest_id": "platform.drivers.lpadc",
+      "version": "2.9.5"
+    }],
     "device_package": "MCXA156VLL",
     "addIncludes": [],
     "projectBoardFolder": "/home/wilgaced/Desktop/ITLA/micro/nxpproject/rgb_control/rgb_control/frdmmcxa156",

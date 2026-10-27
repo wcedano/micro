@@ -20,6 +20,7 @@ pin_labels:
 - {pin_num: '100', pin_signal: P1_7/TRIG_OUT2/LPUART2_CTS_B/CT_INP7/CT4_MAT1/FLEXIO0_D15, label: SW_MODE, identifier: MODE;SW_MODE}
 - {pin_num: '80', pin_signal: P0_6/ISPMODE_N/LPI2C0_HREQ/LPSPI0_PCS1/CT_INP2/FLEXIO0_D6/CMP1_OUT, label: SW_SPEED, identifier: SPEED;SW_SPEED}
 - {pin_num: '34', pin_signal: P2_12/USB0_VBUS_DET/LPSPI1_SCK/LPUART1_RXD/CT4_MAT0/CT0_MAT0/FLEXIO0_D20, label: PWM0, identifier: PWM0}
+- {pin_num: '3', pin_signal: P1_10/LPUART1_RTS_B/LPI2C2_SDAS/CT2_MAT0/FLEXIO0_D18, label: ADCCH1, identifier: ADCCH1}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -57,6 +58,10 @@ BOARD_InitPins:
   - {pin_num: '78', peripheral: LPUART0, signal: RX, pin_signal: P0_2/TDO/SWO/LPUART0_RXD/LPSPI0_SCK/CT0_MAT0/UTICK_CAP0/FLEXIO0_D2}
   - {pin_num: '79', peripheral: LPUART0, signal: TX, pin_signal: P0_3/TDI/LPUART0_TXD/LPSPI0_SDO/CT0_MAT1/UTICK_CAP1/FLEXIO0_D3/CMP0_OUT}
   - {pin_num: '34', peripheral: CTIMER0, signal: 'MATCH, 0', pin_signal: P2_12/USB0_VBUS_DET/LPSPI1_SCK/LPUART1_RXD/CT4_MAT0/CT0_MAT0/FLEXIO0_D20}
+  - {pin_num: '3', peripheral: ADC1, signal: 'A, 8', pin_signal: P1_10/LPUART1_RTS_B/LPI2C2_SDAS/CT2_MAT0/FLEXIO0_D18}
+  - {pin_num: '26', peripheral: ADC1, signal: 'A, 0', pin_signal: P2_4/LPUART2_CTS_B/CT_INP14/CT1_MAT0/FLEXIO0_D12}
+  - {pin_num: '27', peripheral: ADC1, signal: 'A, 1', pin_signal: P2_5/LPUART2_RTS_B/CT_INP15/CT1_MAT1/FLEXIO0_D13}
+  - {pin_num: '39', peripheral: ADC1, signal: 'A, 2', pin_signal: P2_19/TRIG_OUT5/CT3_MAT3/FLEXIO0_D27}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -89,10 +94,12 @@ void BOARD_InitPins(void)
     RESET_ReleasePeripheralReset(kPORT0_RST_SHIFT_RSTn);
     /* GPIO0 peripheral is released from reset */
     RESET_ReleasePeripheralReset(kGPIO0_RST_SHIFT_RSTn);
-    /* GPIO1 peripheral is released from reset */
-    RESET_ReleasePeripheralReset(kGPIO1_RST_SHIFT_RSTn);
+    /* ADC1 peripheral is released from reset */
+    RESET_ReleasePeripheralReset(kADC1_RST_SHIFT_RSTn);
     /* PORT1 peripheral is released from reset */
     RESET_ReleasePeripheralReset(kPORT1_RST_SHIFT_RSTn);
+    /* GPIO1 peripheral is released from reset */
+    RESET_ReleasePeripheralReset(kGPIO1_RST_SHIFT_RSTn);
     /* CTIMER0 peripheral is released from reset */
     RESET_ReleasePeripheralReset(kCTIMER0_RST_SHIFT_RSTn);
     /* PORT2 peripheral is released from reset */
@@ -135,6 +142,16 @@ void BOARD_InitPins(void)
                      /* Input Buffer Enable: Enables. */
                      | PORT_PCR_IBE(PCR_IBE_ibe1));
 
+    /* PORT1_10 (pin 3) is configured as ADC1_A8 */
+    PORT_SetPinMux(BOARD_INITPINS_ADCCH1_PORT, BOARD_INITPINS_ADCCH1_PIN, kPORT_MuxAlt0);
+
+    PORT1->PCR[10] = ((PORT1->PCR[10] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_IBE_MASK)))
+
+                      /* Input Buffer Enable: Disables. */
+                      | PORT_PCR_IBE(PCR_IBE_ibe0));
+
     /* PORT1_7 (pin 100) is configured as P1_7 */
     PORT_SetPinMux(BOARD_INITPINS_SW_MODE_PORT, BOARD_INITPINS_SW_MODE_PIN, kPORT_MuxAlt0);
 
@@ -154,6 +171,36 @@ void BOARD_InitPins(void)
 
                       /* Input Buffer Enable: Enables. */
                       | PORT_PCR_IBE(PCR_IBE_ibe1));
+
+    PORT2->PCR[19] = ((PORT2->PCR[19] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_MUX_MASK | PORT_PCR_IBE_MASK)))
+
+                      /* Pin Multiplex Control: PORT2_19 (pin 39) is configured as ADC1_A2. */
+                      | PORT_PCR_MUX(PORT2_PCR19_MUX_mux00)
+
+                      /* Input Buffer Enable: Disables. */
+                      | PORT_PCR_IBE(PCR_IBE_ibe0));
+
+    PORT2->PCR[4] = ((PORT2->PCR[4] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_MUX_MASK | PORT_PCR_IBE_MASK)))
+
+                     /* Pin Multiplex Control: PORT2_4 (pin 26) is configured as ADC1_A0. */
+                     | PORT_PCR_MUX(PORT2_PCR4_MUX_mux00)
+
+                     /* Input Buffer Enable: Disables. */
+                     | PORT_PCR_IBE(PCR_IBE_ibe0));
+
+    PORT2->PCR[5] = ((PORT2->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_MUX_MASK | PORT_PCR_IBE_MASK)))
+
+                     /* Pin Multiplex Control: PORT2_5 (pin 27) is configured as ADC1_A1. */
+                     | PORT_PCR_MUX(PORT2_PCR5_MUX_mux00)
+
+                     /* Input Buffer Enable: Disables. */
+                     | PORT_PCR_IBE(PCR_IBE_ibe0));
 
     /* PORT3_0 (pin 73) is configured as P3_0 */
     PORT_SetPinMux(BOARD_INITPINS_LED_BLUE_PORT, BOARD_INITPINS_LED_BLUE_PIN, kPORT_MuxAlt0);

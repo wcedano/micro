@@ -15,6 +15,11 @@
 /*${macro:start}*/
 #define BOARD_LED_GPIO     BOARD_LED_RED_GPIO
 #define BOARD_LED_GPIO_PIN BOARD_LED_RED_GPIO_PIN
+
+/* ADC1: la configuracion (comandos, canales, resolucion) viene de los
+ * Config Tools (peripherals.c). Aqui solo la tension de referencia,
+ * para convertir las cuentas a mV. */
+#define DEMO_LPADC_VREF_MV      3300U
 /*${macro:end}*/
 
 /*******************************************************************************

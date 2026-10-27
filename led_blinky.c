@@ -9,6 +9,7 @@
 #include "app.h"
 #include "fsl_debug_console.h"
 #include "fsl_ctimer.h"
+#include "fsl_lpadc.h"
 #include "peripherals.h"
 
 /*******************************************************************************
@@ -20,11 +21,24 @@
 /* 3 LEDs on/off -> 2^3 = 8 combinaciones. bit2=R, bit1=G, bit0=B */
 #define COLOR_COUNT 8U
 
+/* Cada cuanto se lee el ADC, en ms */
+#define ADC_PERIOD_MS 500U
+
+/* Numero de canales del barrido = comandos definidos en el Peripherals tool
+ * (ADC1_commandsConfig en peripherals.c). CMD1 encadena con CMD2, etc. */
+#define ADC_NUM_CHANNELS (sizeof(ADC1_commandsConfig) / sizeof(ADC1_commandsConfig[0]))
+
+/* Resolucion estandar (12 bits): el resultado viene desplazado 3 bits a la izquierda */
+#define ADC_RESULT_SHIFT 3U
+#define ADC_FULL_RANGE   4096U
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
 void color_change(void);
 void color_loop_speed_change(void);
+void adc_init(void);
+void adc_read_polling(uint16_t raw[ADC_NUM_CHANNELS]);
 
 /*******************************************************************************
  * Variables
@@ -37,6 +51,7 @@ volatile bool     g_swSpeedPressed  = false; /* SW3 / SW_SPEED (P0_6, GPIO0) */
 uint8_t  n                 = 0U;
 uint32_t timedalay         = 500000U; /* us entre colores en modo automatico */
 bool     flag_change_color = false;
+
 uint8_t  dutyCicle           = 10U; /* duty cycle del PWM, en % */
 
 /*******************************************************************************
@@ -131,14 +146,38 @@ int main(void)
     DbgConsole_Printf("SW2: cambia el color del LED\r\n");
     DbgConsole_Printf("SW3: cambia la velocidad de parpadeo\r\n");
 
+    /* ADC1 ya lo inicializa BOARD_InitBootPeripherals() (ADC1_init en peripherals.c);
+     * aqui solo se configura el trigger por software */
+    adc_init();
+   
+
     /* Arranque de periferico */
     /* Arranque del timer 0 */
     CTIMER_StartTimer(CTIMER0_PERIPHERAL);
 
+   
+
+    uint32_t lastAdcMs = 0U;
+
     /* Bucle principal */
     while (1)
     {
-        DbgConsole_Printf("color = %u, periodo = %u us\r\n", (unsigned)n, (unsigned)timedalay);
+        /* Lectura del ADC cada ADC_PERIOD_MS, sin bloquear el resto del bucle */
+        if ((uint32_t)(g_msTicks - lastAdcMs) >= ADC_PERIOD_MS)
+        {
+            lastAdcMs = g_msTicks;
+
+            uint16_t raw[ADC_NUM_CHANNELS];
+            adc_read_polling(raw); /* barrido de todos los comandos */
+
+            for (uint32_t i = 0U; i < ADC_NUM_CHANNELS; i++)
+            {
+                uint32_t mV = ((uint32_t)raw[i] * DEMO_LPADC_VREF_MV) / ADC_FULL_RANGE;
+                DbgConsole_Printf("CH%u: raw = %4u | %4u mV   ", (unsigned)ADC1_commandsConfig[i].channelNumber,
+                                  (unsigned)raw[i], (unsigned)mV);
+            }
+            DbgConsole_Printf("| color = %u, periodo = %u us\r\n", (unsigned)n, (unsigned)timedalay);
+        }
         if (g_swModePressed)
         {
             DbgConsole_Printf("SW2 pulsado: color = %u\r\n", (unsigned)n);
@@ -191,4 +230,43 @@ void color_loop_speed_change(void)
     color_change();
     /* Ojo: el reloj real es SystemCoreClock (12 MHz), no el maximo del chip */
     SDK_DelayAtLeastUs(timedalay, SystemCoreClock);
+}
+
+/* =========================================================
+ * ADC1 multicanal en modo polling
+ * La inicializacion (LPADC_Init, calibracion y comandos CMD1..CMDn
+ * encadenados) la genera el Peripherals tool en ADC1_init().
+ * Aqui solo se anade el trigger 0 por software -> primer comando.
+ * ========================================================= */
+void adc_init(void)
+{
+    lpadc_conv_trigger_config_t trigConfig;
+
+    LPADC_GetDefaultConvTriggerConfig(&trigConfig);
+    trigConfig.targetCommandId       = ADC1_ADC_CH0; /* CMD1, arranca la cadena */
+    trigConfig.enableHardwareTrigger = false;
+    LPADC_SetConvTriggerConfig(ADC1_PERIPHERAL, 0U, &trigConfig);
+}
+
+/* Lanza un barrido de todos los canales y espera (polling) los resultados.
+ * Cada resultado trae el comando que lo genero (commandIdSource = i + 1),
+ * asi se coloca en su posicion aunque el orden cambiara. */
+void adc_read_polling(uint16_t raw[ADC_NUM_CHANNELS])
+{
+    lpadc_conv_result_t result;
+
+    LPADC_DoSoftwareTrigger(ADC1_PERIPHERAL, 1U); /* 1U = mascara del trigger 0 */
+
+    for (uint32_t got = 0U; got < ADC_NUM_CHANNELS; got++)
+    {
+        while (!LPADC_GetConvResult(ADC1_PERIPHERAL, &result))
+        {
+        }
+
+        uint32_t idx = result.commandIdSource - 1U;
+        if (idx < ADC_NUM_CHANNELS)
+        {
+            raw[idx] = (uint16_t)(result.convValue >> ADC_RESULT_SHIFT); /* 0..4095 */
+        }
+    }
 }
